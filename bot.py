@@ -21,7 +21,10 @@ async def on_message(message):
         channel = discord.utils.get(message.guild.text_channels, name = "modlog")
         if not channel == None:
             await channel.send(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"')
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print("Invalid perms")
     if message.author == client.user:
         return
 
