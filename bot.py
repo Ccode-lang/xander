@@ -31,7 +31,7 @@ async def on_message(message):
     if message.content.startswith("!echo "):
         await message.channel.send(message.content[6:])
     if message.content.startswith("!servers"):
-        await message.channel.send(str(len(client.servers)))
+        await message.channel.send(str(len(client.guilds)))
 
     if message.content.startswith("!say ") and message.channel.name == "dev":
         say = message.content[5:]
