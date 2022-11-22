@@ -16,6 +16,10 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+
+    if message.author == client.user:
+        return
+
     if profanity.contains_profanity(message.content):
         print(message.author, ' said: "', message.content, '" on server "', message.guild, '"')
         channel = discord.utils.get(message.guild.text_channels, name = "modlog")
@@ -25,18 +29,14 @@ async def on_message(message):
             await message.delete()
         except:
             print("Invalid perms")
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('!hello'):
+    elif message.content.startswith('!hello'):
         await message.channel.send('Hello!')
-
-    if message.content.startswith("!echo "):
+    elif message.content.startswith("!echo "):
+        print(message.author.name + ' echoed: "' + message.content[6:] + '" on server "' + message.guild.name + '"')
         await message.channel.send(message.content[6:])
-    if message.content.startswith("!servers"):
+    elif message.content.startswith("!servers"):
         await message.channel.send(str(len(client.guilds)))
-
-    if message.content.startswith("!say ") and message.channel.name == "dev":
+    elif message.content.startswith("!say ") and message.channel.name == "dev":
         say = message.content[5:]
         channel = discord.utils.get(message.guild.text_channels, name = "general")
         if not channel == None:
