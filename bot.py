@@ -44,8 +44,8 @@ async def on_message(message):
         channel = discord.utils.get(message.guild.text_channels, name = config.xanderchannel)
         if not channel == None:
             await channel.send(say)
-    elif message.content.startswith("!play ") and message.channel.name == config.dev and message.author.name in config.admins:
-        play = message.content[6:]
+    elif message.content.startswith("!status ") and message.channel.name == config.dev and message.author.name in config.admins:
+        play = message.content[8:]
         await client.change_presence(activity=discord.Game(" " + play))
 
 client.run(config.token)
