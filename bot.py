@@ -11,7 +11,7 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print(f'We have logged in as {client.user}')
-    await client.change_presence(activity=discord.Game(' around with you guys.'))
+    await client.change_presence(activity=discord.Game(config.defaultact))
 
 
 
@@ -20,10 +20,12 @@ async def on_message(message):
 
     if message.author == client.user:
         return
+    
+    check = "".join(ch for ch in message.content if ch.isalnum())
 
-    if profanity.contains_profanity(message.content):
+    if profanity.contains_profanity(check):
         print(message.author, ' said: "', message.content, '" on server "', message.guild, '"')
-        channel = discord.utils.get(message.guild.text_channels, name = "modlog")
+        channel = discord.utils.get(message.guild.text_channels, name = config.modlog)
         if not channel == None:
             await channel.send(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"')
         try:
@@ -37,10 +39,13 @@ async def on_message(message):
         await message.channel.send(message.content[6:])
     elif message.content.startswith("!servers"):
         await message.channel.send(str(len(client.guilds)))
-    elif message.content.startswith("!say ") and message.channel.name == "dev":
-        say = message.content[5:]
-        channel = discord.utils.get(message.guild.text_channels, name = "general")
+    elif message.content.startswith("!say ") and message.channel.name == config.dev:
+        say = message.content[5:] 
+        channel = discord.utils.get(message.guild.text_channels, name = config.xanderchannel)
         if not channel == None:
             await channel.send(say)
+    elif message.content.startswith("!play ") and message.channel.name == config.dev and message.author.name in config.admins:
+        play = message.content[6:]
+        await client.change_presence(activity=discord.Game(" " + play))
 
 client.run(config.token)
