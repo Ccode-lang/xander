@@ -4,3 +4,4 @@ dev = "dev"
 modlog = "modlog"
 xanderchannel = "general"
 admins = ["Ccode"]
+botping = ""
