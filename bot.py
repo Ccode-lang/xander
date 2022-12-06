@@ -56,5 +56,7 @@ async def on_message(message):
         global status
         status = play
         await client.change_presence(activity=discord.Game(play))
+    elif message.content.lower() == "gm":
+        await message.channel.send("The " + message.author.mention + " has awoken!")
 
 client.run(config.token)
