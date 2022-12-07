@@ -59,5 +59,7 @@ async def on_message(message):
         await client.change_presence(activity=discord.Game(play))
     elif message.content.lower() == "gm":
         await message.channel.send("The " + message.author.mention + " has awoken!")
+    elif message.content.lower() == "gn":
+        await message.channel.send("The" + message.author.mention + " has gone into a deep slumber.")
 
 client.run(config.token)
