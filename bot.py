@@ -22,6 +22,7 @@ async def on_message(message):
 
     if message.author == client.user:
         return
+    #print(message.author.id)
     
     if config.botping in message.content:
         num = random.randint(1, 10)
@@ -51,7 +52,7 @@ async def on_message(message):
         channel = discord.utils.get(message.guild.text_channels, name = config.xanderchannel)
         if not channel == None:
             await channel.send(say)
-    elif message.content.startswith("!status ") and message.channel.name == config.dev and message.author.name in config.admins:
+    elif message.content.startswith("!status ") and message.channel.name == config.dev and message.author.id in config.admins:
         play = message.content[8:]
         global status
         status = play
