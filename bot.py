@@ -22,7 +22,7 @@ def log(line):
     t = t.strftime("%d/%m/%Y %H:%M:%S")
     line = "[" + t + "] " + line
     print(line)
-    file = open(os.path.join("log", ".txt"), "a")
+    file = open(os.path.join("log", "log.txt"), "a")
     file.write(line + os.linesep)
     file.close()
 
