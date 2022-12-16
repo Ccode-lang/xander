@@ -2,6 +2,8 @@ import discord
 from better_profanity import profanity
 import config
 import random
+import os
+import datetime
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -12,10 +14,17 @@ status = config.defaultact
 
 @client.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+    log(f'We have logged in as {client.user}')
     await client.change_presence(activity=discord.Game(status))
 
-
+def log(line):
+    t = datetime.datetime.now()
+    t = t.strftime("%d/%m/%Y %H:%M:%S")
+    line = "[" + t + "] " + line
+    print(line)
+    file = open(os.path.join("log", ".txt"), "a")
+    file.write(line + os.linesep)
+    file.close()
 
 @client.event
 async def on_message(message):
@@ -32,18 +41,18 @@ async def on_message(message):
     check = "".join(ch for ch in message.content if ch.isalnum())
 
     if profanity.contains_profanity(check) or profanity.contains_profanity(message.content):
-        print(message.author, ' said: "', message.content, '" on server "', message.guild, '"')
+        log(message.author, ' said: "', message.content, '" on server "', message.guild, '"')
         channel = discord.utils.get(message.guild.text_channels, name = config.modlog)
         if not channel == None:
             await channel.send(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"')
         try:
             await message.delete()
         except:
-            print("Invalid perms")
+            log("Invalid perms")
     elif message.content.startswith('!hello'):
         await message.channel.send('Hello!')
     elif message.content.startswith("!echo "):
-        print(message.author.name + ' echoed: "' + message.content[6:] + '" on server "' + message.guild.name + '"')
+        log(message.author.name + ' echoed: "' + message.content[6:] + '" on server "' + message.guild.name + '"')
         await message.channel.send(message.content[6:])
     elif message.content.startswith("!servers"):
         await message.channel.send(str(len(client.guilds)))
