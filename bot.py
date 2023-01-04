@@ -41,7 +41,7 @@ async def on_message(message):
     check = "".join(ch for ch in message.content if ch.isalnum())
 
     if profanity.contains_profanity(check) or profanity.contains_profanity(message.content):
-        log(message.author + ' said: "' + message.content + '" on server "' + message.guild + '"')
+        log(message.author.name + ' said: "' + message.content + '" on server "' + str(message.guild) + '"')
         channel = discord.utils.get(message.guild.text_channels, name = config.modlog)
         if not channel == None:
             await channel.send(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"')
