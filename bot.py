@@ -26,6 +26,15 @@ def log(line):
     file.write(line + os.linesep)
     file.close()
 
+async def modlog(string, message, delete=False):
+    channel = discord.utils.get(message.guild.text_channels, name = config.modlog)
+    if not channel == None:
+        await channel.send(string)
+    try:
+        if delete:
+            await message.delete()
+    except:
+        log("Invalid perms")
 @client.event
 async def on_message(message):
 
@@ -42,17 +51,12 @@ async def on_message(message):
 
     if profanity.contains_profanity(check) or profanity.contains_profanity(message.content):
         log(message.author.name + ' said: "' + message.content + '" on server "' + str(message.guild) + '"')
-        channel = discord.utils.get(message.guild.text_channels, name = config.modlog)
-        if not channel == None:
-            await channel.send(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"')
-        try:
-            await message.delete()
-        except:
-            log("Invalid perms")
+        await modlog(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"', message, True)
     elif message.content.startswith('!hello'):
         await message.channel.send('Hello!')
     elif message.content.startswith("!echo "):
         log(message.author.name + ' echoed: "' + message.content[6:] + '" on server "' + message.guild.name + '"')
+        await modlog(message.author.name + ' echoed: "' + message.content[6:] + '" on server "' + message.guild.name + '"', message)
         await message.channel.send(message.content[6:])
     elif message.content.startswith("!servers"):
         await message.channel.send(str(len(client.guilds)))
