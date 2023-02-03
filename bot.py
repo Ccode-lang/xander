@@ -4,6 +4,8 @@ import config
 import random
 import os
 import datetime
+import atexit
+import sys
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -12,10 +14,23 @@ client = discord.Client(intents=intents)
 
 status = config.defaultact
 
+plugins = []
+
+
+
 @client.event
 async def on_ready():
     log(f'We have logged in as {client.user}')
     await client.change_presence(activity=discord.Game(status))
+    log("Loading plugins")
+    files = os.listdir()
+    global plugins
+    for filename in files:
+        if filename.endswith(".py") and filename.startswith("plugin-"):
+            plugins += [__import__(filename.split(".")[0])]
+    for plugin in plugins:
+        plugin.onload(log)
+
 
 def log(line):
     t = datetime.datetime.now()
@@ -34,13 +49,20 @@ async def modlog(string, message, delete=False):
         if delete:
             await message.delete()
     except:
-        log("Invalid perms")
+        log(f"Invalid perms to access modlog channel in server {message.guild.name}")
 @client.event
 async def on_message(message):
 
+    go = True
     if message.author == client.user:
         return
     #print(message.author.id)
+    for plugin in plugins:
+        go = await plugin.onmessage(message)
+
+    if not go:
+        return 0
+    
     
     if config.botping in message.content:
         num = random.randint(1, 10)
@@ -75,4 +97,12 @@ async def on_message(message):
     elif message.content.lower() == "gn":
         await message.channel.send("The " + message.author.mention + " has gone into a deep slumber.")
 
-client.run(config.token)
+def exit_handler():
+    print("exit run")
+
+atexit.register(exit_handler)
+
+try:
+    client.run(config.token)
+except discord.errors.LoginFailure:
+    log("Improper token on startup.")
