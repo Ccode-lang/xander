@@ -59,9 +59,8 @@ async def on_message(message):
     #print(message.author.id)
     for plugin in plugins:
         go = await plugin.onmessage(message)
-
-    if not go:
-        return 0
+        if not go:
+            return 0
     
     
     if config.botping in message.content:
