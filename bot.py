@@ -24,10 +24,12 @@ async def on_ready():
     await client.change_presence(activity=discord.Game(status))
     log("Loading plugins")
     files = os.listdir()
+    global plugins
     for filename in files:
         if filename.endswith(".py") and filename.startswith("plugin-"):
-            global plugins
             plugins += [__import__(filename.split(".")[0])]
+    for plugin in plugins:
+        plugin.onload()
 
 
 def log(line):
