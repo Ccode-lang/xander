@@ -29,7 +29,7 @@ async def on_ready():
         if filename.endswith(".py") and filename.startswith("plugin-"):
             plugins += [__import__(filename.split(".")[0])]
     for plugin in plugins:
-        plugin.onload()
+        plugin.onload(log)
 
 
 def log(line):
@@ -49,7 +49,7 @@ async def modlog(string, message, delete=False):
         if delete:
             await message.delete()
     except:
-        log("Invalid perms")
+        log(f"Invalid perms to access modlog channel in server {message.guild.name}")
 @client.event
 async def on_message(message):
 
@@ -102,4 +102,7 @@ def exit_handler():
 
 atexit.register(exit_handler)
 
-client.run(config.token)
+try:
+    client.run(config.token)
+except discord.errors.LoginFailure:
+    log("Improper token on startup.")
