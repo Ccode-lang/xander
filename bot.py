@@ -4,6 +4,8 @@ import config
 import random
 import os
 import datetime
+import atexit
+import sys
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -12,10 +14,21 @@ client = discord.Client(intents=intents)
 
 status = config.defaultact
 
+plugins = []
+
+
+
 @client.event
 async def on_ready():
     log(f'We have logged in as {client.user}')
     await client.change_presence(activity=discord.Game(status))
+    log("Loading plugins")
+    files = os.listdir()
+    for filename in files:
+        if filename.endswith(".py") and filename.startswith("plugin-"):
+            global plugins
+            plugins += [__import__(filename.split(".")[0])]
+
 
 def log(line):
     t = datetime.datetime.now()
@@ -38,9 +51,16 @@ async def modlog(string, message, delete=False):
 @client.event
 async def on_message(message):
 
+    go = True
     if message.author == client.user:
         return
     #print(message.author.id)
+    for plugin in plugins:
+        go = await plugin.onmessage(message)
+
+    if not go:
+        return 0
+    
     
     if config.botping in message.content:
         num = random.randint(1, 10)
@@ -74,5 +94,10 @@ async def on_message(message):
         await message.channel.send("The " + message.author.mention + " has awoken!")
     elif message.content.lower() == "gn":
         await message.channel.send("The " + message.author.mention + " has gone into a deep slumber.")
+
+def exit_handler():
+    print("exit run")
+
+atexit.register(exit_handler)
 
 client.run(config.token)
