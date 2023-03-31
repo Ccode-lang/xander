@@ -56,13 +56,6 @@ async def on_message(message):
     go = True
     if message.author == client.user:
         return
-    
-    check = "".join(ch for ch in message.content if ch.isalnum())
-    if profanity.contains_profanity(check) or profanity.contains_profanity(message.content):
-        log(message.author.name + ' said: "' + message.content + '" on server "' + str(message.guild) + '"')
-        await modlog(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"', message, True)
-        return
-    
     #print(message.author.id)
     for plugin in plugins:
         go = await plugin.onmessage(message)
@@ -75,8 +68,12 @@ async def on_message(message):
         if num == 10:
             await message.channel.send("Why have you pinged me?")
 
+    check = "".join(ch for ch in message.content if ch.isalnum())
 
-    if message.content.startswith('!hello'):
+    if profanity.contains_profanity(check) or profanity.contains_profanity(message.content):
+        log(message.author.name + ' said: "' + message.content + '" on server "' + str(message.guild) + '"')
+        await modlog(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"', message, True)
+    elif message.content.startswith('!hello'):
         await message.channel.send('Hello!')
     elif message.content.startswith("!echo "):
         log(message.author.name + ' echoed: "' + message.content[6:] + '" on server "' + message.guild.name + '"')
