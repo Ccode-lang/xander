@@ -1,11 +1,21 @@
-import discord
+import sys
+import config
+
+if config.platform == "discord":
+    import discord
+elif config.platform == "guilded":
+    import guilded as discord
+else:
+    print("Invalid platform in config.py!")
+    sys.exit()
+
+
 from better_profanity import profanity
 import config
 import random
 import os
 import datetime
 import atexit
-import sys
 
 intents = discord.Intents.all()
 # intents.message_content = True
@@ -66,7 +76,7 @@ async def on_message(message):
     global plugins
 
     go = True
-    if message.author == client.user:
+    if message.author.id == client.user.id:
         return
     # print(message.author.id)
     for plugin in plugins:
