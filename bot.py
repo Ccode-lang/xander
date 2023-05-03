@@ -17,10 +17,13 @@ import os
 import datetime
 import atexit
 
-intents = discord.Intents.all()
-# intents.message_content = True
+if config.platform == "discord":
+    intents = discord.Intents.all()
+    # intents.message_content = True
 
-client = discord.Client(intents=intents)
+    client = discord.Client(intents=intents)
+if config.platform == "guilded":
+    client = discord.Client()
 
 status = config.defaultact
 
@@ -60,7 +63,8 @@ access = {
 @client.event
 async def on_ready():
     log(f'We have logged in as {client.user}')
-    await client.change_presence(activity=discord.Game(status))
+    if config.platform == "discord":
+        await client.change_presence(activity=discord.Game(status))
     log("Loading plugins")
     files = os.listdir()
     global plugins
@@ -110,7 +114,7 @@ async def on_message(message):
             message.guild.text_channels, name=config.xanderchannel)
         if not channel == None:
             await channel.send(say)
-    elif message.content.startswith("!status ") and message.channel.name == config.dev and message.author.id in config.admins:
+    elif message.content.startswith("!status ") and message.channel.name == config.dev and message.author.id in config.admins and config.platform == "discord":
         play = message.content[8:]
         global status
         status = play
