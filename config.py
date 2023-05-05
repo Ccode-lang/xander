@@ -4,4 +4,5 @@ dev = "dev"
 modlog = "modlog"
 xanderchannel = "general"
 admins = [837119081790046228]
-botping = ""
+botping = "none"
+platform = "discord"

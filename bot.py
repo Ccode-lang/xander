@@ -1,16 +1,29 @@
-import discord
+import sys
+import config
+
+if config.platform == "discord":
+    import discord
+elif config.platform == "guilded":
+    import guilded as discord
+else:
+    print("Invalid platform in config.py!")
+    sys.exit()
+
+
 from better_profanity import profanity
 import config
 import random
 import os
 import datetime
 import atexit
-import sys
 
-intents = discord.Intents.all()
-# intents.message_content = True
+if config.platform == "discord":
+    intents = discord.Intents.all()
+    # intents.message_content = True
 
-client = discord.Client(intents=intents)
+    client = discord.Client(intents=intents)
+if config.platform == "guilded":
+    client = discord.Client()
 
 status = config.defaultact
 
@@ -50,7 +63,8 @@ access = {
 @client.event
 async def on_ready():
     log(f'We have logged in as {client.user}')
-    await client.change_presence(activity=discord.Game(status))
+    if config.platform == "discord":
+        await client.change_presence(activity=discord.Game(status))
     log("Loading plugins")
     files = os.listdir()
     global plugins
@@ -66,7 +80,7 @@ async def on_message(message):
     global plugins
 
     go = True
-    if message.author == client.user:
+    if message.author.id == client.user.id:
         return
     # print(message.author.id)
     for plugin in plugins:
@@ -100,7 +114,7 @@ async def on_message(message):
             message.guild.text_channels, name=config.xanderchannel)
         if not channel == None:
             await channel.send(say)
-    elif message.content.startswith("!status ") and message.channel.name == config.dev and message.author.id in config.admins:
+    elif message.content.startswith("!status ") and message.channel.name == config.dev and message.author.id in config.admins and config.platform == "discord":
         play = message.content[8:]
         global status
         status = play
