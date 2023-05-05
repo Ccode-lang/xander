@@ -3,3 +3,4 @@ token
 config.py.bak
 log
 plugin-*.py
+config
