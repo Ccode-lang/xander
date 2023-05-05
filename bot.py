@@ -120,9 +120,15 @@ async def on_message(message):
         status = play
         await client.change_presence(activity=discord.Game(play))
     elif message.content.lower() == "gm":
-        await message.channel.send("The " + message.author.mention + " has awoken!")
+        if config.platform == "guilded":
+            await message.channel.send("The " + message.author.name + " has awoken!")
+        elif config.platform == "discord":
+            await message.channel.send("The " + message.author.mention + " has awoken!")
     elif message.content.lower() == "gn":
-        await message.channel.send("The " + message.author.mention + " has gone into a deep slumber.")
+        if config.platform == "guilded":
+            await message.channel.send("The " + message.author.name + " has gone into a deep slumber.")
+        elif config.platform == "discord":
+            await message.channel.send("The " + message.author.mention + " has gone into a deep slumber.")
     elif message.content == "!reload" and message.author.id in config.admins:
         await message.channel.send("Reloading plugins.")
         log("Reloading plugins.")
