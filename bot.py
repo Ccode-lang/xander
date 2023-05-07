@@ -21,8 +21,10 @@ if config.platform == "discord":
     intents = discord.Intents.all()
     # intents.message_content = True
 
-    client = discord.Client(intents=intents)
+    client = discord.AutoShardedClient(intents=intents)
 if config.platform == "guilded":
+
+    # No sharding on guilded
     client = discord.Client()
 
 status = config.defaultact
