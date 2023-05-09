@@ -27,4 +27,4 @@ I'm still working on guidlines but you can open a pull request at any time!
 I use the MIT license for my projects.  If you want more info look at `LICENSE`.
 
 # Other contact.
-If you want to come and hang out or ask questions about xander this is an IRC server I host: `hangoutirc.mooo.com/6697`
+If you want to come and hang out or ask questions about xander this is an IRC server I host: `hangoutirc.mooo.com/6697`  If I'm not on my bot `hangoutbot` will log your questions and I'll be able to answer them when I get online.
