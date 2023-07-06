@@ -58,6 +58,7 @@ access = {
     "modlog": modlog,
     "config": config
 }
+loadplugins = True
 
 
 @client.event
@@ -65,14 +66,17 @@ async def on_ready():
     log(f'We have logged in as {client.user}')
     if config.platform == "discord":
         await client.change_presence(activity=discord.Game(status))
-    log("Loading plugins")
-    files = os.listdir()
-    global plugins
-    for filename in files:
-        if filename.endswith(".py") and filename.startswith("plugin-"):
-            plugins += [__import__(filename.split(".")[0])]
-    for plugin in plugins:
-        plugin.onload(access)
+    global loadplugins
+    if loadplugins:
+        log("Loading plugins")
+        files = os.listdir()
+        global plugins
+        for filename in files:
+            if filename.endswith(".py") and filename.startswith("plugin-"):
+                plugins += [__import__(filename.split(".")[0])]
+        for plugin in plugins:
+            plugin.onload(access)
+        loadplugins = False
 
 
 @client.event
