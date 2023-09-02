@@ -21,7 +21,7 @@ If you want to add more features to the bot you can do so through plugins.  The 
 Plugins are loaded from the directory that contains `bot.py` and their file must be prefixed with `plugin-` and end with `.py`.
 
 # Contributing
-I'm still working on guidlines but you can open a pull request at any time!
+I'm still working on guidelines but you can open a pull request at any time!
 
 # License
 I use the MIT license for my projects.  If you want more info look at `LICENSE`.
