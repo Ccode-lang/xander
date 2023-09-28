@@ -26,6 +26,9 @@ async def onmessage_priority(message):
         return False
     return True
 
+async def onmessage(message):
+    pass
+
 
 def onexit():
     log("Profanity plugin exit run.")
