@@ -14,7 +14,7 @@ def onload(objin):
     client = obj["client"]
     log("Servers plugin loaded!")
 
-async def onmessage_priority(message):
+async def onmessage(message):
     if message.content.startswith("!servers"):
         await message.channel.send(str(len(client.guilds)))
         return False

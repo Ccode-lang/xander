@@ -12,7 +12,7 @@ def onload(objin):
     modlog = obj["modlog"]
     log("Echo plugin loaded!")
 
-async def onmessage_priority(message):
+async def onmessage(message):
     if message.content.startswith("!echo "):
         log(message.author.name + ' echoed: "' +
             message.content[6:] + '" on server "' + message.guild.name + '"')

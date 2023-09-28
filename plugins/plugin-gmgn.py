@@ -12,7 +12,7 @@ def onload(objin):
     config = obj["config"]
     log("Say plugin loaded!")
 
-async def onmessage_priority(message):
+async def onmessage(message):
     if message.content.lower() == "gm":
         if config.platform == "guilded":
             await message.channel.send("The " + message.author.name + " has awoken!")

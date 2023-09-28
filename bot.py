@@ -69,8 +69,8 @@ async def on_ready():
     global loadplugins
     if loadplugins:
         log("Loading plugins")
-        os.chdir("plugins")
-        files = os.listdir()
+        sys.path.insert(0, os.path.join(os.getcwd(), "plugins"))
+        files = os.listdir("plugins")
         global plugins
         for filename in files:
             if filename.endswith(".py") and filename.startswith("plugin-"):
@@ -78,7 +78,6 @@ async def on_ready():
         for plugin in plugins:
             plugin.onload(access)
         loadplugins = False
-        os.chdir("..")
 
 
 @client.event
@@ -93,8 +92,6 @@ async def on_message(message):
         try:
             go = await plugin.onmessage_priority(message)
         except:
-            print("Caught the following exception:")
-            print_exc()
             go = True
         if not go:
             runothers = False

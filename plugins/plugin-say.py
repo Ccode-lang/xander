@@ -18,7 +18,7 @@ def onload(objin):
     discord = obj["discord"]
     log("Say plugin loaded!")
 
-async def onmessage_priority(message):
+async def onmessage(message):
     if message.content.startswith("!say ") and message.channel.name == config.dev:
         say = message.content[5:]
         channel = discord.utils.get(

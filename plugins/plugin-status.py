@@ -20,7 +20,7 @@ def onload(objin):
     discord = obj["discord"]
     log("Status plugin loaded!")
 
-async def onmessage_priority(message):
+async def onmessage(message):
     if message.content.startswith("!status ") and message.channel.name == config.dev and message.author.id in config.admins and config.platform == "discord":
         play = message.content[8:]
         global status

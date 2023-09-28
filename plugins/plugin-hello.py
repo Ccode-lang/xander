@@ -12,7 +12,7 @@ def onload(objin):
     modlog = obj["modlog"]
     log("Hello plugin loaded!")
 
-async def onmessage_priority(message):
+async def onmessage(message):
     if message.content.startswith('!hello'):
         await message.channel.send('Hello!')
     return True
