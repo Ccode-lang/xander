@@ -2,5 +2,4 @@ __pycache__
 token
 config.py.bak
 log
-plugin-*.py
 config
