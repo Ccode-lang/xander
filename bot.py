@@ -10,12 +10,11 @@ else:
     sys.exit()
 
 
-from better_profanity import profanity
 import config
-import random
 import os
 import datetime
 import atexit
+from traceback import print_exc
 
 if config.platform == "discord":
     intents = discord.Intents.all()
@@ -56,7 +55,8 @@ access = {
     "discord": discord,
     "log": log,
     "modlog": modlog,
-    "config": config
+    "config": config,
+    "client": client
 }
 loadplugins = True
 
@@ -69,7 +69,8 @@ async def on_ready():
     global loadplugins
     if loadplugins:
         log("Loading plugins")
-        files = os.listdir()
+        sys.path.insert(0, os.path.join(os.getcwd(), "plugins"))
+        files = os.listdir("plugins")
         global plugins
         for filename in files:
             if filename.endswith(".py") and filename.startswith("plugin-"):
@@ -82,58 +83,32 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global plugins
-
+    runothers = True
     go = True
     if message.author.id == client.user.id:
         return
-    # print(message.author.id)
+
     for plugin in plugins:
-        go = await plugin.onmessage(message)
+        try:
+            go = await plugin.onmessage_priority(message)
+        except:
+            go = True
         if not go:
+            runothers = False
             return 0
 
-    if config.botping in message.content:
-        num = random.randint(1, 10)
-        if num == 10:
-            await message.channel.send("Why have you pinged me?")
+    if runothers == True:
+        for plugin in plugins:
+            try:
+                go = await plugin.onmessage(message)
+            except:
+                print("Caught the following exception:")
+                print_exc()
+                go = True
+            if not go:
+                return 0
 
-    check = "".join(ch for ch in message.content if ch.isalnum())
-
-    if profanity.contains_profanity(check) or profanity.contains_profanity(message.content):
-        log(message.author.name + ' said: "' + message.content +
-            '" on server "' + str(message.guild) + '"')
-        await modlog(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"', message, True)
-    elif message.content.startswith('!hello'):
-        await message.channel.send('Hello!')
-    elif message.content.startswith("!echo "):
-        log(message.author.name + ' echoed: "' +
-            message.content[6:] + '" on server "' + message.guild.name + '"')
-        await modlog(message.author.name + ' echoed: "' + message.content[6:] + '" on server "' + message.guild.name + '"', message)
-        await message.channel.send(message.content[6:])
-    elif message.content.startswith("!servers"):
-        await message.channel.send(str(len(client.guilds)))
-    elif message.content.startswith("!say ") and message.channel.name == config.dev:
-        say = message.content[5:]
-        channel = discord.utils.get(
-            message.guild.text_channels, name=config.xanderchannel)
-        if not channel == None:
-            await channel.send(say)
-    elif message.content.startswith("!status ") and message.channel.name == config.dev and message.author.id in config.admins and config.platform == "discord":
-        play = message.content[8:]
-        global status
-        status = play
-        await client.change_presence(activity=discord.Game(play))
-    elif message.content.lower() == "gm":
-        if config.platform == "guilded":
-            await message.channel.send("The " + message.author.name + " has awoken!")
-        elif config.platform == "discord":
-            await message.channel.send("The " + message.author.mention + " has awoken!")
-    elif message.content.lower() == "gn":
-        if config.platform == "guilded":
-            await message.channel.send("The " + message.author.name + " has gone into a deep slumber.")
-        elif config.platform == "discord":
-            await message.channel.send("The " + message.author.mention + " has gone into a deep slumber.")
-    elif message.content == "!reload" and message.author.id in config.admins:
+    if message.content == "!reload" and message.author.id in config.admins:
         await message.channel.send("Reloading plugins.")
         log("Reloading plugins.")
         plugins = []
