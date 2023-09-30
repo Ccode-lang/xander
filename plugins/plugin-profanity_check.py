@@ -1,18 +1,6 @@
 from better_profanity import profanity
-
-
-obj = None
-log = None
-modlog = None
-
-
-def onload(objin):
-    global obj
-    global log
-    global modlog
-    obj = objin
-    log = obj["log"]
-    modlog = obj["modlog"]
+from xander_plugin import *
+def onload():
     log("Profanity plugin loaded!")
 
 async def onmessage_priority(message):

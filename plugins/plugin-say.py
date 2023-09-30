@@ -1,21 +1,7 @@
-obj = None
-log = None
-modlog = None
-config = None
-discord = None
+from xander_plugin import *
 
 
-def onload(objin):
-    global obj
-    global log
-    global modlog
-    global config
-    global discord
-    obj = objin
-    log = obj["log"]
-    modlog = obj["modlog"]
-    config = obj["config"]
-    discord = obj["discord"]
+def onload():
     log("Say plugin loaded!")
 
 async def onmessage(message):

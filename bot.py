@@ -51,13 +51,6 @@ async def modlog(string, message, delete=False):
         log(
             f"Invalid perms to access modlog channel in server {message.guild.name}")
 
-access = {
-    "discord": discord,
-    "log": log,
-    "modlog": modlog,
-    "config": config,
-    "client": client
-}
 loadplugins = True
 
 
@@ -76,7 +69,7 @@ async def on_ready():
             if filename.endswith(".py") and filename.startswith("plugin-"):
                 plugins += [__import__(filename.split(".")[0])]
         for plugin in plugins:
-            plugin.onload(access)
+            plugin.onload()
         loadplugins = False
 
 
@@ -117,7 +110,7 @@ async def on_message(message):
             if filename.endswith(".py") and filename.startswith("plugin-"):
                 plugins += [__import__(filename.split(".")[0])]
         for plugin in plugins:
-            plugin.onload(access)
+            plugin.onload()
 
 
 def exit_handler():
@@ -132,3 +125,4 @@ try:
     client.run(config.token)
 except discord.errors.LoginFailure:
     log("Improper token on startup.")
+import xander_plugin
