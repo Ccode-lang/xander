@@ -1,5 +1,5 @@
 __pycache__
 token
-config.py.bak
+*.bak
 log
 config
