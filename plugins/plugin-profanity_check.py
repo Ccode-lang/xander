@@ -15,7 +15,7 @@ async def onmessage_priority(message):
     return True
 
 async def onmessage(message):
-    pass
+    return True
 
 
 def onexit():
