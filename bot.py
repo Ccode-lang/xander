@@ -27,6 +27,7 @@ status = config.defaultact
 
 plugins = []
 
+help_menu = {}
 
 def log(line):
     t = datetime.datetime.now()
