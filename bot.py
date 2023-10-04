@@ -108,6 +108,14 @@ async def on_message(message):
         await message.channel.send("Reloading plugins.")
         log("Reloading plugins.")
         pluginsinit()
+    elif message.content == "!xhelp":
+        print("test")
+        longmsg = ""
+        for feature in help_menu:
+            longmsg += f"{feature}:{help_menu[feature]}\n"
+        for i in range(0, len(longmsg), 2000):
+            message.channel.send(longmsg[i:i+2000])
+        
 
 
 def exit_handler():
