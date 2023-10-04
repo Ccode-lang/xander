@@ -1,6 +1,7 @@
 from xander_plugin import *
 
 def onload():
+    help_menu_edit("!status", "A command that changes the status of the bot. (Needs bot admin)")
     log("Status plugin loaded!")
 
 async def onmessage(message):

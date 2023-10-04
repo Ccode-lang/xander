@@ -2,6 +2,7 @@ from xander_plugin import *
 
 
 def onload():
+    help_menu_edit("Gmgn plugin", "Saying \"gm\" or \"gn\" makes the bot respond.")
     log("Say plugin loaded!")
 
 async def onmessage(message):

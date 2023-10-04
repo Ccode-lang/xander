@@ -2,6 +2,7 @@ from xander_plugin import *
 
 
 def onload():
+    help_menu_edit("!echo", "A command that echos your input.")
     log("Echo plugin loaded!")
 
 async def onmessage(message):
