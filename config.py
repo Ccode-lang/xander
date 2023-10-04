@@ -1,5 +1,5 @@
 token = ''
-defaultact = " around with you guys!"
+defaultact = " !xhelp"
 dev = "dev"
 modlog = "modlog"
 xanderchannel = "general"

@@ -27,7 +27,9 @@ status = config.defaultact
 
 plugins = []
 
-help_menu = {}
+help_menu = {
+    "!xhelp" : "Shows this help message."
+}
 
 def log(line):
     t = datetime.datetime.now()
@@ -110,12 +112,11 @@ async def on_message(message):
         log("Reloading plugins.")
         pluginsinit()
     elif message.content == "!xhelp":
-        print("test")
         longmsg = ""
         for feature in help_menu:
-            longmsg += f"{feature}:{help_menu[feature]}\n"
+            longmsg += f"**{feature}**: {help_menu[feature]}\n"
         for i in range(0, len(longmsg), 2000):
-            message.channel.send(longmsg[i:i+2000])
+            await message.channel.send(longmsg[i:i+2000])
         
 
 

@@ -1,6 +1,7 @@
 from better_profanity import profanity
 from xander_plugin import *
 def onload():
+    help_menu_edit("Profanity check plugin", "A plugin that filters profanity.")
     log("Profanity plugin loaded!")
 
 async def onmessage_priority(message):
