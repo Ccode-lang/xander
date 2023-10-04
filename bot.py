@@ -1,5 +1,13 @@
-import sys
 import config
+import os
+import datetime
+import atexit
+from traceback import format_exc
+import sys
+
+os.chdir(os.path.dirname(__file__) or '.')
+sys.path.insert(0, os.path.join(os.getcwd(), "plugins"))
+
 
 if config.platform == "discord":
     import discord
@@ -9,17 +17,8 @@ else:
     print("Invalid platform in config.py!")
     sys.exit()
 
-
-import config
-import os
-import datetime
-import atexit
-from traceback import print_exc
-
 if config.platform == "discord":
     intents = discord.Intents.all()
-    # intents.message_content = True
-
     client = discord.Client(intents=intents)
 if config.platform == "guilded":
     client = discord.Client()
@@ -34,6 +33,8 @@ def log(line):
     t = t.strftime("%d/%m/%Y %H:%M:%S")
     line = "[" + t + "] " + line
     print(line)
+    if not os.path.exists(os.path.join("log", "log.txt")):
+        os.mkdir("log")
     file = open(os.path.join("log", "log.txt"), "a")
     file.write(line + os.linesep)
     file.close()
@@ -53,23 +54,26 @@ async def modlog(string, message, delete=False):
 
 loadplugins = True
 
-
-@client.event
-async def on_ready():
-    log(f'We have logged in as {client.user}')
-    if config.platform == "discord":
-        await client.change_presence(activity=discord.Game(status))
-    global loadplugins
-    if loadplugins:
-        log("Loading plugins")
-        sys.path.insert(0, os.path.join(os.getcwd(), "plugins"))
-        files = os.listdir("plugins")
+def pluginsinit():
         global plugins
+        plugins = []
+        log("Loading plugins")
+        files = os.listdir("plugins")
         for filename in files:
             if filename.endswith(".py") and filename.startswith("plugin-"):
                 plugins += [__import__(filename.split(".")[0])]
         for plugin in plugins:
             plugin.onload()
+
+
+@client.event
+async def on_ready():
+    global loadplugins
+    log(f'We have logged in as {client.user}')
+    if config.platform == "discord":
+        await client.change_presence(activity=discord.Game(status))
+    if loadplugins:
+        pluginsinit()
         loadplugins = False
 
 
@@ -95,8 +99,7 @@ async def on_message(message):
             try:
                 go = await plugin.onmessage(message)
             except:
-                print("Caught the following exception:")
-                print_exc()
+                log(f"Caught the following exception:\n{format_exc()}")
                 go = True
             if not go:
                 return 0
@@ -104,17 +107,11 @@ async def on_message(message):
     if message.content == "!reload" and message.author.id in config.admins:
         await message.channel.send("Reloading plugins.")
         log("Reloading plugins.")
-        plugins = []
-        files = os.listdir()
-        for filename in files:
-            if filename.endswith(".py") and filename.startswith("plugin-"):
-                plugins += [__import__(filename.split(".")[0])]
-        for plugin in plugins:
-            plugin.onload()
+        pluginsinit()
 
 
 def exit_handler():
-    print("exit run. Sending exit signal to plugins")
+    log("exit run. Sending exit signal to plugins")
     for plugin in plugins:
         plugin.onexit()
 
@@ -125,4 +122,5 @@ try:
     client.run(config.token)
 except discord.errors.LoginFailure:
     log("Improper token on startup.")
+
 import xander_plugin
