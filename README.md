@@ -4,6 +4,12 @@
 A discord/guilded bot for moderation and general utility.  Easily extensible with the plugin system that is included.
 
 # How to run
+1. Install `better_profanity` and `discord.py` through pip.  (The bot is not tested on Python 2 so make sure you are using 3.8 or up!)
+2. Remove any plugins you do not want by deleting them from the plugins folder. (You can also add your own plugins if you know how to write them.  More info in the wiki section of the repository.)
+3. Change your `config.py`.  (More info below)
+4. Run `bot.py` and watch the magic happen!
+
+# Changing config
 To run you have to change the config.py to suit your needs.  The below is a description of each field:  
  - token: The bot login token.  Either guilded or discord tokens will work.
  - defaultact: The status of the bot.
