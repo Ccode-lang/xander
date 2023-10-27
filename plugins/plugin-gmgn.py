@@ -3,7 +3,7 @@ from xander_plugin import *
 
 def onload():
     help_menu_edit("Gmgn plugin", "Saying \"gm\" or \"gn\" makes the bot respond.")
-    log("Say plugin loaded!")
+    log("Gm gn plugin loaded!")
 
 async def onmessage(message):
     if message.content.lower() == "gm":
@@ -22,4 +22,4 @@ async def onmessage(message):
 
 
 def onexit():
-    log("Say plugin exit run.")
+    log("Gm gn plugin exit run.")
