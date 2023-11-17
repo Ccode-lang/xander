@@ -26,10 +26,17 @@ if config.platform == "guilded":
 status = config.defaultact
 
 plugins = []
+help_menu_default = [("!xhelp", "Shows this help message.")]
 
-help_menu = {
-    "!xhelp" : "Shows this help message."
-}
+help_menu = {}
+
+def reset_menu():
+    global help_menu
+    global help_menu_default
+    help_menu.clear()
+    for tup in help_menu_default:
+        help_menu[tup[0]] = tup[1]
+
 
 def log(line):
     t = datetime.datetime.now()
@@ -59,7 +66,10 @@ loadplugins = True
 
 def pluginsinit():
         global plugins
+        global help_menu
+        global help_menu_default
         plugins = []
+        reset_menu()
         log("Loading plugins")
         files = os.listdir("plugins")
         for filename in files:
