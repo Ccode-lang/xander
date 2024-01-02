@@ -5,10 +5,10 @@ def onload():
     log("Profanity plugin loaded!")
 
 async def onmessage_priority(message):
-    if predict(message.content):
+    if predict([message.content]) == [1]:
         log(message.author.name + ' said: "' + message.content +
-            '" on server "' + str(message.guild) + '"')
-        await modlog(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '"', message, True)
+            '" on server "' + str(message.guild) + '" (Probability: ' + str(predict_prob([message.content])[0]) + ' )')
+        await modlog(message.author.name + ' said: "' + message.content + '" on server "' + message.guild.name + '" (Probability: ' + str(predict_prob([message.content])[0]) + ' )', message, True)
         return False
     return True
 
