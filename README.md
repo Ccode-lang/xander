@@ -26,6 +26,8 @@ If you want to add more features to the bot you can do so through plugins.  The 
 
 Plugins are loaded from the 'plugins' directory and their file must be prefixed with `plugin-` and end with `.py`.  
 
+I have a few plugins made and stored at https://github.com/Ccode-lang/xander-testing if you want to check them out. I'll add more information about them later.  
+
 If you want to remove features you can do so by going to the plugins folder and deleting the corresponding plugin files.
 
 # Contributing
