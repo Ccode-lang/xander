@@ -93,7 +93,6 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global plugins
-    runothers = True
     go = True
     if message.author.id == client.user.id:
         return
@@ -102,20 +101,18 @@ async def on_message(message):
         try:
             go = await plugin.onmessage_priority(message)
         except:
-            go = True
+            pass
         if not go:
-            runothers = False
-            return 0
+            return
 
-    if runothers == True:
-        for plugin in plugins:
-            try:
+    for plugin in plugins:
+        try:
+            if hasattr(plugin, 'onmessage'):
                 go = await plugin.onmessage(message)
-            except:
-                log(f"Caught the following exception:\n{format_exc()}")
-                go = True
-            if not go:
-                return 0
+        except:
+            log(f"Caught the following exception:\n{format_exc()}")
+        if not go:
+            return
 
     if message.content == "!reload" and message.author.id in config.admins:
         await message.channel.send("Reloading plugins.")
