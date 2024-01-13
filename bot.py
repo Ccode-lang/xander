@@ -5,10 +5,11 @@ import atexit
 from traceback import format_exc
 import sys
 
+# Put plugins into python path.
 os.chdir(os.path.dirname(__file__) or '.')
 sys.path.insert(0, os.path.join(os.getcwd(), "plugins"))
 
-
+# Import required bot library.
 if config.platform == "discord":
     import discord
 elif config.platform == "guilded":
@@ -17,19 +18,22 @@ else:
     print("Invalid platform in config.py!")
     sys.exit()
 
+# Manage intents.
 if config.platform == "discord":
     intents = discord.Intents.all()
     client = discord.Client(intents=intents)
 if config.platform == "guilded":
     client = discord.Client()
 
+# Bot status
 status = config.defaultact
 
+# Plugin variables
 plugins = []
 help_menu_default = [("!xhelp", "Shows this help message.")]
-
 help_menu = {}
 
+# Reset help_menu to help_menu_default
 def reset_menu():
     global help_menu
     global help_menu_default
@@ -37,7 +41,7 @@ def reset_menu():
     for tup in help_menu_default:
         help_menu[tup[0]] = tup[1]
 
-
+# Log a line to the terminal and to log/log.txt
 def log(line):
     t = datetime.datetime.now()
     t = t.strftime("%d/%m/%Y %H:%M:%S")
@@ -49,7 +53,7 @@ def log(line):
     file.write(line + os.linesep)
     file.close()
 
-
+# Send a message to modlog and delete the flagged message if specified.
 async def modlog(string, message, delete=False):
     channel = discord.utils.get(
         message.guild.text_channels, name=config.modlog)
@@ -62,8 +66,10 @@ async def modlog(string, message, delete=False):
         log(
             f"Invalid perms to access modlog channel in server {message.guild.name}")
 
+# State check for first load
 loadplugins = True
 
+# Init plugins and load them into the plugins list
 def pluginsinit():
         global plugins
         global help_menu
@@ -78,7 +84,7 @@ def pluginsinit():
         for plugin in plugins:
             plugin.onload()
 
-
+# Load plugins and set the presence when the bot is online.
 @client.event
 async def on_ready():
     global loadplugins
@@ -89,14 +95,17 @@ async def on_ready():
         pluginsinit()
         loadplugins = False
 
-
+# Manage new messages
 @client.event
 async def on_message(message):
     global plugins
     go = True
+
+    # Ignore messages if they are from the bot.
     if message.author.id == client.user.id:
         return
 
+    # Run priority onmessage functions.
     for plugin in plugins:
         try:
             go = await plugin.onmessage_priority(message)
@@ -105,6 +114,7 @@ async def on_message(message):
         if not go:
             return
 
+    # Run plugin onmessages.
     for plugin in plugins:
         try:
             if hasattr(plugin, 'onmessage'):
@@ -114,6 +124,7 @@ async def on_message(message):
         if not go:
             return
 
+    # Reload and help commands
     if message.content == "!reload" and message.author.id in config.admins:
         await message.channel.send("Reloading plugins.")
         log("Reloading plugins.")
@@ -126,18 +137,20 @@ async def on_message(message):
             await message.channel.send(longmsg[i:i+2000])
         
 
-
+# Tell plugins when the bot exits.
 def exit_handler():
     log("exit run. Sending exit signal to plugins")
     for plugin in plugins:
         plugin.onexit()
 
-
 atexit.register(exit_handler)
 
+
+# Run the bot
 try:
     client.run(config.token)
 except discord.errors.LoginFailure:
     log("Improper token on startup.")
 
+# Initialize plugin API
 import xander_plugin
