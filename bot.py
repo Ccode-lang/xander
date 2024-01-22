@@ -70,7 +70,7 @@ async def modlog(string, message, delete=False):
 loadplugins = True
 
 # Init plugins and load them into the plugins list
-def pluginsinit():
+async def pluginsinit():
         global plugins
         global help_menu
         global help_menu_default
@@ -83,6 +83,10 @@ def pluginsinit():
                 plugins += [__import__(filename.split(".")[0])]
         for plugin in plugins:
             plugin.onload()
+            try:
+                await plugin.async_onload()
+            except:
+                pass
 
 # Load plugins and set the presence when the bot is online.
 @client.event
@@ -92,7 +96,7 @@ async def on_ready():
     if config.platform == "discord":
         await client.change_presence(activity=discord.Game(status))
     if loadplugins:
-        pluginsinit()
+        await pluginsinit()
         loadplugins = False
 
 # Manage new messages
