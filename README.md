@@ -1,5 +1,7 @@
 <img src="https://user-images.githubusercontent.com/78437178/236541048-447c112d-4df4-4427-b617-c66a0322cb28.png"  width="20%" height="20%">  
 
+[Discord server](https://discord.gg/tsn6UtKy)  
+
 # Xander
 A discord/guilded bot for moderation and general utility.  Easily extensible with the plugin system that is included.
 
@@ -35,6 +37,3 @@ I'm still working on guidelines but you can open a pull request at any time!
 
 # License
 I use the MIT license for my projects.  If you want more info look at `LICENSE`.
-
-# Other contact.
-Discussions in this repository for right now.
