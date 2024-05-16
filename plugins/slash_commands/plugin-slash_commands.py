@@ -16,8 +16,11 @@ async def async_onload():
         except:
             pass
     try:
-        tree.copy_global_to(guild=client.get_guild(config.priority_server))
-        await tree.sync(guild=client.get_guild(config.priority_server))
+        try:
+            tree.copy_global_to(guild=client.get_guild(config.priority_server))
+            await tree.sync(guild=client.get_guild(config.priority_server))
+        except:
+            pass
         await tree.sync()
         log("Done with command sync.")
     except:
