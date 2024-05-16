@@ -7,7 +7,9 @@ import sys
 
 # Put plugins into python path.
 os.chdir(os.path.dirname(__file__) or '.')
-sys.path.insert(0, os.path.join(os.getcwd(), "plugins"))
+
+for folder in [x[0] for x in os.walk(os.getcwd())]:
+    sys.path.insert(0, folder)
 
 # Import required bot library.
 if config.platform == "discord":
@@ -77,10 +79,11 @@ async def pluginsinit():
         plugins = []
         reset_menu()
         log("Loading plugins")
-        files = os.listdir("plugins")
-        for filename in files:
-            if filename.endswith(".py") and filename.startswith("plugin-"):
-                plugins += [__import__(filename.split(".")[0])]
+        for folder in [x[0] for x in os.walk(os.getcwd())]:
+            files = os.listdir(folder)
+            for filename in files:
+                if filename.endswith(".py") and filename.startswith("plugin-"):
+                    plugins += [__import__(filename.split(".")[0])]
         for plugin in plugins:
             plugin.onload()
             try:
