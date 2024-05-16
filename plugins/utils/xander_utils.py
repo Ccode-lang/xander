@@ -6,7 +6,10 @@ async def send_ac(ctx, message):
         await ctx.channel.send(message)
 
 async def pong(ctx):
-    await ctx.response.send_message("Command Run", ephemeral=True)
+    try:
+        await ctx.response.send_message("Command Run", ephemeral=True)
+    except:
+        pass
 
 def get_author(ctx):
     try:
