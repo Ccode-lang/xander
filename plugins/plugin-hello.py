@@ -1,4 +1,6 @@
 from xander_plugin import *
+from discord import app_commands
+import xander_utils
 
 
 def onload():
@@ -7,8 +9,15 @@ def onload():
 
 async def onmessage(message):
     if message.content.startswith('!hello'):
-        await message.channel.send('Hello!')
+        await hello(message)
+        return False
     return True
+
+def register_slash(tree):
+    tree.add_command(app_commands.Command(name="hello", callback=hello, description="Say hello to Xander."))
+
+async def hello(ctx):
+    await xander_utils.send_ac(ctx, "Hello!")
 
 
 def onexit():
