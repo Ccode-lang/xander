@@ -1,3 +1,5 @@
+import asyncio
+import platform
 import config
 import os
 import datetime
@@ -152,7 +154,8 @@ def exit_handler():
 
 atexit.register(exit_handler)
 
-
+if platform.system() == 'Windows':
+	asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 # Run the bot
 try:
     client.run(config.token)
