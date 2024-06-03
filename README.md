@@ -1,6 +1,6 @@
 <img src="https://user-images.githubusercontent.com/78437178/236541048-447c112d-4df4-4427-b617-c66a0322cb28.png"  width="20%" height="20%">  
 
-[Discord server](https://discord.gg/tsn6UtKy)  
+[Discord server](https://discord.gg/XjQjnC9tQX)  
 
 # Xander
 A discord/guilded bot for moderation and general utility.  Easily extensible with the plugin system that is included.
