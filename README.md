@@ -36,4 +36,4 @@ If you want to remove features you can do so by going to the plugins folder and 
 I'm still working on guidelines but you can open a pull request at any time!
 
 # License
-I use the MIT license for my projects.  If you want more info look at `LICENSE`.
+I use the MIT license for my projects. For this project specifically, I am not accountable for anything you do with the bot that breaks a law or does not follow the [Discord TOS](https://discord.com/terms). If you want more info look at `LICENSE`.
