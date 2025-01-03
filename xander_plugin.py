@@ -21,11 +21,11 @@ def help_menu_edit(feature_name, info):
 
 async def join_vc(channel):
     global voice_client
-    if voice_client == None and not config.platform == "guilded":
+    if voice_client == None:
         voice_client = await channel.connect()
 
 async def leave_vc():
     global voice_client
-    if not voice_client == None and not config.platform == "guilded":
+    if not voice_client == None:
         await voice_client.disconnect()
         voice_client = None

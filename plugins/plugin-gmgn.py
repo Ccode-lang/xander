@@ -7,16 +7,10 @@ def onload():
 
 async def onmessage(message):
     if message.content.lower() == "gm":
-        if config.platform == "guilded":
-            await message.channel.send("top of the morning to ya " + message.author.name + "!")
-        elif config.platform == "discord":
-            await message.channel.send("top of the morning to ya " + message.author.mention + "!")
+        await message.channel.send("top of the morning to ya " + message.author.mention + "!")
         return False
     elif message.content.lower() == "gn":
-        if config.platform == "guilded":
-            await message.channel.send(message.author.name + ", well off to bed you cheeky git.")
-        elif config.platform == "discord":
-            await message.channel.send(message.author.mention + ", well off to bed you cheeky git.")
+        await message.channel.send(message.author.mention + ", well off to bed you cheeky git.")
         return False
     return True
 

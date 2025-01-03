@@ -8,14 +8,14 @@ def onload():
     log("Status plugin loaded!")
 
 async def onmessage(message):
-    if message.content.startswith("!status ") and message.channel.name == config.dev and message.author.id in config.admins and config.platform == "discord":
+    if message.content.startswith("!status ") and message.channel.name == config.dev and message.author.id in config.admins:
         await statusc(message, message.content[8:])
         return False
     return True
 
 
 async def statusc(ctx, statusm: str):
-    if ctx.channel.name == config.dev and xander_utils.get_author(ctx).id in config.admins and config.platform == "discord":
+    if ctx.channel.name == config.dev and xander_utils.get_author(ctx).id in config.admins:
         play = statusm
         global status
         status = play

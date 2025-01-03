@@ -14,20 +14,12 @@ for folder in [x[0] for x in os.walk(os.getcwd())]:
     sys.path.insert(0, folder)
 
 # Import required bot library.
-if config.platform == "discord":
-    import discord
-elif config.platform == "guilded":
-    import guilded as discord
-else:
-    print("Invalid platform in config.py!")
-    sys.exit()
+import discord
+
 
 # Manage intents.
-if config.platform == "discord":
-    intents = discord.Intents.all()
-    client = discord.Client(intents=intents)
-if config.platform == "guilded":
-    client = discord.Client()
+intents = discord.Intents.all()
+client = discord.Client(intents=intents)
 
 # Bot status
 status = config.defaultact
@@ -98,8 +90,7 @@ async def pluginsinit():
 async def on_ready():
     global loadplugins
     log(f'We have logged in as {client.user}')
-    if config.platform == "discord":
-        await client.change_presence(activity=discord.Game(status))
+    await client.change_presence(activity=discord.Game(status))
     if loadplugins:
         await pluginsinit()
         loadplugins = False
@@ -137,7 +128,7 @@ async def on_message(message):
     if message.content == "!reload" and message.author.id in config.admins:
         await message.channel.send("Reloading plugins.")
         log("Reloading plugins.")
-        pluginsinit()
+        await pluginsinit()
     elif message.content == "!xhelp":
         longmsg = ""
         for feature in help_menu:
